@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     }
     
     var changeNumber: Bool = false
+    var brain = CalculatorBrain()
     
     @IBOutlet weak var display: UILabel!
 
@@ -33,36 +34,32 @@ class ViewController: UIViewController {
             changeNumber = true
         }
     }
-    
-    var openStack = Array<Double>()
-    
 
     @IBAction func setReturn() {
         changeNumber = false
-        openStack.append(displayValue)
-        
-        println("\(openStack)")
+        if let result = brain.pushOperand(displayValue){
+            displayValue = result
+        }else{
+            displayValue = 0
+        }
     }
     
     @IBAction func reset() {
         changeNumber = false
-        openStack = []
-        
+        brain.evaluate()
         display.text = "0"
-        println("\(openStack)")
     }
     @IBAction func operate(sender: UIButton) {
-        let operateName = sender.currentTitle
         if changeNumber{
             setReturn()
         }
-        switch operateName! {
-        case "+": performOperate({$0 + $1})
-        case "−": performOperate({$1 - $0})
-        case "x": performOperate({$0 * $1})
-        case "÷": performOperate({$1 / $0})
-        case "√": performOperate({(op1) in  sqrt(op1) })
-        default: break
+        
+        if let operation = sender.currentTitle{
+            if let result = brain.performOperation(operation){
+                displayValue = result
+            }else{
+                displayValue = 0
+            }
         }
     }
     
@@ -76,19 +73,6 @@ class ViewController: UIViewController {
         }
     }
 
-    private func performOperate(operate: (Double, Double)->Double){
-        if openStack.count >= 2 {
-            displayValue = operate(openStack.removeLast(), openStack.removeLast())
-            setReturn()
-        }
-    }
-    
-    private func performOperate(operate: Double->Double){
-        if openStack.count >= 1 {
-            displayValue = operate(openStack.removeLast())
-            setReturn()
-        }
-    }
 
 
 }
