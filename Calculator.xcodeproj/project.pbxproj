@@ -160,7 +160,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0630;
-				ORGANIZATIONNAME = "侯德善";
+				ORGANIZATIONNAME = Marquis;
 				TargetAttributes = {
 					95014BDD1B8E155700F526F6 = {
 						CreatedOnToolsVersion = 6.3.2;
